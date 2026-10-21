@@ -4,6 +4,7 @@
 
 INCLUDE Irvine32.inc
 ExitProcess proto,dwExitCode:dword
+PUBLIC initializeInvaders
 ;file accesss to varibles 
 PUBLIC playerX, playerY, score, lives, level, gameStatus
 PUBLIC invaders, invaderX, invaderY, invaderAlive, invaderDirection, remainingInvaders
@@ -78,6 +79,6 @@ initializeInvaders PROC USES ebx esi edi
 
 		add esi, 4
 	loop L1
-
+	ret
 initializeInvaders ENDP
 END

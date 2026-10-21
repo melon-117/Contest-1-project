@@ -1,0 +1,8 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Win32" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Space_Invaders.vcxproj" Id="486395b9-3638-4995-a6cf-ff5108d5577d" />
+</Solution>
