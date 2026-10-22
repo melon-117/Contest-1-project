@@ -1,3 +1,6 @@
+;DO NOT COMPILE this file once GameLoop.asm is finished 
+;This file is ment to be used for testing the Rendering.asm file primarily to test if the Player, invader(s), & bullets can draw to the terminal 
+;Please DELETE file once GameLoop.asm is completed
 .386
 .model flat,stdcall
 .stack 4096
