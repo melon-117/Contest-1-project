@@ -3,28 +3,9 @@
 .stack 4096
 
 INCLUDE Irvine32.inc
+INCLUDE SpaceGame.inc
 ExitProcess proto,dwExitCode:dword
-initializeInvaders PROTO STDCALL
-EXTERN playerX:DWORD
-EXTERN playerY:DWORD
-EXTERN invaderX:DWORD
-EXTERN invaderY:DWORD
-EXTERN invaderAlive:DWORD
-EXTERN playerBulletX:DWORD
-EXTERN playerBulletY:DWORD
-EXTERN playerBulletActive:DWORD
-EXTERN invaderBulletX:DWORD
-EXTERN invaderBulletY:DWORD
-EXTERN invaderBulletActive:DWORD
-EXTERN remainingInvaders:DWORD
-EXTERN gameStatus:DWORD
-EXTERN score:DWORD
-EXTERN lives:DWORD
-EXTERN level:DWORD
-PUBLIC DrawPlayer
-PUBLIC DrawInvaders
-PUBLIC DrawBullets
-PUBLIC DrawHUD
+
 .data
 ScoreLabel BYTE "Score: ", 0
 LivesLabel BYTE " Lives: ", 0
@@ -49,7 +30,7 @@ DrawInvaders PROC USES eax ebx ecx edx esi edi
 	; Draw all invaders based on their positions and alive status
 	mov esi, 0 ; index for invaders
 	mov ecx, 15 ; number of invaders to draw
-	L1: 
+	L1:
 		mov ebx, invaderAlive[esi] ; check if invader is alive
 		cmp ebx, 0
 		je L2 ; if not alive, skip drawing
@@ -79,6 +60,11 @@ DrawBullets PROC USES eax ebx ecx edx esi edi
 		mov eax, playerBulletX[esi] ; get player bullet X position
 		mov ebx, playerBulletY[esi] ; get player bullet Y position
 		; Call a function to draw the player bullet sprite at (eax, ebx)
+		
+		; move bullets y
+		dec ebx
+		mov playerBulletY[esi],ebx
+
 		mov dl, al  ; Move playerBulletX into dl for Gotoxy
 		mov dh, bl   ; Move playerBulletY into dh for Gotoxy
 		call Gotoxy

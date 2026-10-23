@@ -5,20 +5,8 @@
 .model flat,stdcall
 .stack 4096
 INCLUDE Irvine32.inc
+INCLUDE SpaceGame.inc
 ExitProcess proto,dwExitCode:dword
-EXTERN playerX:DWORD
-EXTERN playerY:DWORD
-EXTERN playerBulletX:DWORD
-EXTERN playerBulletY:DWORD
-EXTERN playerBulletActive:DWORD
-EXTERN invaderBulletX:DWORD
-EXTERN invaderBulletY:DWORD
-EXTERN invaderBulletActive:DWORD
-DrawPlayer PROTO STDCALL
-DrawInvaders PROTO STDCALL
-DrawBullets PROTO STDCALL
-DrawHUD PROTO STDCALL
-initializeInvaders PROTO STDCALL
 .data
 .code
 main PROC

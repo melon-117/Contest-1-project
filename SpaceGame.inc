@@ -37,4 +37,3 @@ DrawInvaders PROTO STDCALL
 DrawBullets PROTO STDCALL
 DrawHUD PROTO STDCALL
 initializeInvaders PROTO STDCALL
-
