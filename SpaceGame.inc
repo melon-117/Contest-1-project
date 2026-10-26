@@ -4,6 +4,7 @@
 
 EXTERN screenLeftBound:DWORD
 EXTERN screenRightBound:DWORD
+EXTERN screenTopBound:DWORD
 EXTERN playerX:DWORD
 EXTERN playerY:DWORD
 EXTERN score:DWORD
@@ -37,3 +38,4 @@ DrawInvaders PROTO STDCALL
 DrawBullets PROTO STDCALL
 DrawHUD PROTO STDCALL
 initializeInvaders PROTO STDCALL
+playerBulletCollision PROTO STDCALL

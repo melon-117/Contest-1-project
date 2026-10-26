@@ -53,24 +53,28 @@ DrawBullets PROC USES eax ebx ecx edx esi edi
 	; Draw all bullets based on their positions and active status
 	mov esi, 0 ; index for bullets
 	mov ecx, 5 ; number of bullets to draw
-	PlayerBulletLoop: 
-		mov ebx, playerBulletActive[esi] ; check if player bullet is active
+	PlayerBulletLoop:
+		mov ebx, playerBulletActive[esi]
 		cmp ebx, 0
-		je SkipPlayerBullet ; if not active, skip drawing
-		mov eax, playerBulletX[esi] ; get player bullet X position
-		mov ebx, playerBulletY[esi] ; get player bullet Y position
-		; Call a function to draw the player bullet sprite at (eax, ebx)
-		
-		; move bullets y
+		je SkipPlayerBullet
+		mov eax, playerBulletX[esi]
+		mov ebx, playerBulletY[esi]
+		; If bullet has reached the top, deactivate it
+		cmp ebx, screenTopBound
+		jbe DeactivatePlayerBullet
+		; Move bullet upward
 		dec ebx
-		mov playerBulletY[esi],ebx
-
-		mov dl, al  ; Move playerBulletX into dl for Gotoxy
-		mov dh, bl   ; Move playerBulletY into dh for Gotoxy
+		mov playerBulletY[esi], ebx
+		; Draw bullet
+		mov dl, al
+		mov dh, bl
 		call Gotoxy
-		; DrawSprite eax, ebx, playerBulletSprite
 		mov al, '|'
 		call WriteChar
+
+		jmp SkipPlayerBullet
+	DeactivatePlayerBullet:
+		mov playerBulletActive[esi], 0
 	SkipPlayerBullet:
 		add esi, 4
 		loop PlayerBulletLoop

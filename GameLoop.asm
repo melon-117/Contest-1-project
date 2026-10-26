@@ -14,8 +14,13 @@ ExitKey = 'q'
 	newTime DWORD ?
 	totalTick DWORD 0
 	placeHolderText BYTE "Press q to Exit", 0
+	consoleHandle DWORD ?
+	cursorInfo DWORD 25, 0
 .code
 main PROC
+    invoke GetStdHandle, -11
+    mov consoleHandle, eax
+    invoke SetConsoleCursorInfo, consoleHandle, ADDR cursorInfo
 	call initializeInvaders
 	mov playerX,50
 	mov playerY,25
@@ -44,6 +49,7 @@ main PROC
 	call DrawPlayer
 	call DrawInvaders
 	call DrawBullets
+	call playerBulletCollision
 
 	sub totalTick,MSPerTick ; Adjust total ticks when tick complete
 	cmp totalTick,MSPerTick
@@ -57,39 +63,75 @@ main PROC
 	
 main ENDP
 
-ProcessUserInput PROC USES eax
-	call ReadKey ; Jump on exit key press
-	cmp al,ExitKey
-	jne C1
-	invoke ExitProcess,0
-	jmp processed
-	C1: cmp al,'d'
-	jne C2
-	mov eax,screenRightBound
-	cmp PlayerX,eax
-	je processed
-	add playerX,1
-	jmp processed
-	C2: cmp al,'a'
-	jne C3
-	mov eax,screenLeftBound
-	cmp playerX,eax
-	je processed
-	sub playerX,1
-	jmp processed
-	C3: cmp al,' '
-	jne C4
-	mov eax,playerX
-	mov playerBulletX,eax
-	mov eax,playerY
-	dec eax
-	mov playerBulletY,eax
-	mov playerBulletActive,1
-	jmp processed
-	C4:
 
-	processed:
-	ret
+ProcessUserInput PROC USES eax esi ebx ecx edx
+    call ReadKey
+    jz processed
+
+    ; Exit only when q is pressed
+    cmp al, ExitKey
+    je exitGame
+
+    ; Check arrow keys
+    cmp ah, 4Dh
+    je moveRight
+
+    cmp ah, 4Bh
+    je moveLeft
+
+    ; Check A and D keys
+    cmp al, 'd'
+    je moveRight
+
+    cmp al, 'a'
+    je moveLeft
+
+    ; Check spacebar to fire
+    cmp al, ' '
+    je fireBulletCheck
+
+    jmp processed
+
+exitGame:
+    invoke ExitProcess, 0
+
+moveRight:
+    mov eax, screenRightBound
+    cmp playerX, eax
+    jae processed
+    add playerX, 1
+    jmp processed
+
+moveLeft:
+    mov eax, screenLeftBound
+    cmp playerX, eax
+    jbe processed
+    sub playerX, 1
+    jmp processed
+
+fireBulletCheck:
+    mov esi, 0
+    mov ecx, 5
+
+checkSlot:
+    mov ebx, playerBulletActive[esi]
+    cmp ebx, 0
+    je fireBullet
+    add esi, 4
+    loop checkSlot
+    jmp processed
+
+fireBullet:
+    mov eax, playerX
+    mov ebx, playerY
+    dec ebx
+    mov playerBulletActive[esi], 1
+    mov playerBulletX[esi], eax
+    mov playerBulletY[esi], ebx
+    jmp processed
+
+processed:
+    ret
 ProcessUserInput ENDP
 
 END main
