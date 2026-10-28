@@ -16,6 +16,10 @@ ExitKey = 'q'
 	placeHolderText BYTE "Press q to Exit", 0
 	consoleHandle DWORD ?
 	cursorInfo DWORD 25, 0
+    gameOverText BYTE "Game Over!", 0
+    finalScoreText BYTE "Your final score: ", 0
+    exitPromptText BYTE "Press any key to exit...", 0
+    gameWonText BYTE "YOU WIN! All Invaders have been defeated!",0
 .code
 main PROC
     invoke GetStdHandle, -11
@@ -45,11 +49,20 @@ main PROC
 
 	call ProcessUserInput
 	call Clrscr
+    call DrawBullets
+    call playerBulletCollision
+    call invaderBulletCollision
+    cmp gameStatus, 0
+    je GameOver
+    cmp gameStatus, 2
+    je GameWon
+    call fireInvaderBullet
+    call updateInvaderBullets
 	call DrawHud
 	call DrawPlayer
 	call DrawInvaders
-	call DrawBullets
-	call playerBulletCollision
+	
+
 
 	sub totalTick,MSPerTick ; Adjust total ticks when tick complete
 	cmp totalTick,MSPerTick
@@ -60,9 +73,33 @@ main PROC
 	; Sleep proc used to reduce excessive CPU usage while looping
 	invoke Sleep,MSPerTick
 	jmp L1
-	
-main ENDP
 
+    GameOver:
+        call clrscr
+        mov edx, offset gameOverText
+        call WriteString
+        jmp ShowFinalScore
+    GameWon:
+        call clrscr
+        mov edx, offset gameWonText
+        call WriteString
+        jmp ShowFinalScore
+    ShowFinalScore:
+        call Crlf
+        mov edx, OFFSET finalScoreText
+        call WriteString
+        mov eax, score
+        call WriteDec
+        call Crlf
+        mov edx, OFFSET exitPromptText
+        call WriteString
+     waitForKeyPress:
+        call ReadKey
+        jz waitForKeyPress
+        jmp exitCurrentGame
+     exitCurrentGame:
+        invoke ExitProcess, 0
+main ENDP
 
 ProcessUserInput PROC USES eax esi ebx ecx edx
     call ReadKey
