@@ -25,6 +25,7 @@ EXTERN invaderBulletY:DWORD
 EXTERN invaderBulletActive:DWORD
 EXTERN invaderBulletSlot:DWORD
 EXTERN remainingInvaders:DWORD
+EXTERN selectedInvader:DWORD
 EXTERN gameStatus:DWORD
 EXTERN score:DWORD
 EXTERN lives:DWORD
@@ -39,3 +40,4 @@ DrawBullets PROTO STDCALL
 DrawHUD PROTO STDCALL
 initializeInvaders PROTO STDCALL
 playerBulletCollision PROTO STDCALL
+moveInvader PROTO STDCALL

@@ -50,6 +50,7 @@ main PROC
 	call DrawInvaders
 	call DrawBullets
 	call playerBulletCollision
+    call moveInvader
 
 	sub totalTick,MSPerTick ; Adjust total ticks when tick complete
 	cmp totalTick,MSPerTick

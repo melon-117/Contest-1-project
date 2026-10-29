@@ -7,7 +7,7 @@ ExitProcess proto,dwExitCode:dword
 PUBLIC initializeInvaders
 ;file accesss to varibles 
 PUBLIC playerX, playerY, score, lives, level, gameStatus
-PUBLIC invaders, invaderX, invaderY, invaderAlive, invaderDirection, remainingInvaders
+PUBLIC invaders, invaderX, invaderY, invaderAlive, invaderDirection, remainingInvaders, selectedInvader
 PUBLIC playerBulletSlot, playerBulletX, playerBulletY, playerBulletActive
 PUBLIC invaderBulletSlot, invaderBulletX, invaderBulletY, invaderBulletActive
 PUBLIC screenWidth, screenHeight, screenLeftBound, screenRightBound, screenTopBound, screenBottomBound
@@ -23,7 +23,9 @@ PUBLIC screenWidth, screenHeight, screenLeftBound, screenRightBound, screenTopBo
 	invaderX DWORD 15 DUP(?)
 	invaderY DWORD 15 DUP(?)
 	invaderAlive DWORD 15 DUP(1)
-	invaderDirection DWORD 15 DUP(1) ; 1 for right, -1 for left
+	invaderDirection DWORD 1 ; 1 for right, -1 for left
+	invaderMoveDown DWORD 0 ; > 0 for remaining invaders to move down, 0 for stationary
+	selectedInvader DWORD 0
 	;player bullet
 	playerBulletSlot DWORD 5 DUP(?) ;might be redundant depending on how we implement the bullet system
 	playerBulletX DWORD 5 DUP(?)
@@ -75,10 +77,60 @@ initializeInvaders PROC USES ebx esi edi
 		mov invaderY[esi], eax ; store y position
 		
 		mov invaderAlive[esi], 1 ; mark invader as alive
-		mov invaderDirection[esi], 1 ; initial direction to the right
 
 		add esi, 4
 	loop L1
 	ret
 initializeInvaders ENDP
+
+moveInvader PROC USES eax
+	cmp remainingInvaders,0 ; return if no invaders left
+	je Return
+	L1:
+	; get current valid invader
+	mov edx, 0 ; setup for div
+	mov eax, selectedInvader
+	mov ebx, remainingInvaders
+	div ebx ; get modulus of selected invader
+	mov esi, edx
+	imul esi,esi,4
+	mov selectedInvader, edx
+
+	inc selectedInvader ; advance selected for next call
+	cmp invaderAlive[esi],0 ; if invader is dead, go to next invader
+	je L1
+	
+	cmp invaderMoveDown,0
+	jne MoveDown ; move down if queued
+
+	mov eax,invaderDirection
+	add invaderX[esi],eax ; move in x direction
+
+	; check bounds
+	mov eax,screenRightBound
+	cmp invaderX[esi],eax
+	je StartMoveDown ; set move down queue if at right bound
+	mov eax,screenLeftBound
+	cmp invaderX[esi],eax
+	je StartMoveDown ; set move down queue if at left bound
+	jmp Return
+
+	MoveDown:
+	inc invaderY[esi] ; change invader Y coordinate
+	dec invaderMoveDown ; advance invader move down queue
+	jmp Return
+
+	StartMoveDown:
+	neg invaderDirection ; change direction
+	mov eax,remainingInvaders
+	mov invaderMoveDown,eax ; set move down queue
+	mov eax,invaderDirection ; go back in bounds
+	add invaderX[esi],eax
+	jmp Return
+
+	Return:
+	ret
+
+moveInvader ENDP
+
 END
