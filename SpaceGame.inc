@@ -39,9 +39,12 @@ DrawPlayer PROTO STDCALL
 DrawInvaders PROTO STDCALL
 DrawBullets PROTO STDCALL
 DrawHUD PROTO STDCALL
+ClearPlayer PROTO STDCALL
+ClearInvaders PROTO STDCALL
+ClearBullets PROTO STDCALL
 initializeInvaders PROTO STDCALL
 playerBulletCollision PROTO STDCALL
 invaderBulletCollision PROTO STDCALL
 fireInvaderBullet PROTO STDCALL
 updateInvaderBullets PROTO STDCALL
-moveInvader PROTO STDCALL
+moveInvaders PROTO STDCALL

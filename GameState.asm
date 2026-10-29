@@ -83,14 +83,14 @@ initializeInvaders PROC USES ebx esi edi
 	ret
 initializeInvaders ENDP
 
-moveInvader PROC USES eax
+moveInvaders PROC USES eax ebx edx esi 
 	cmp remainingInvaders,0 ; return if no invaders left
 	je Return
 	L1:
 	; get current valid invader
 	mov edx, 0 ; setup for div
 	mov eax, selectedInvader
-	mov ebx, remainingInvaders
+	mov ebx, 15
 	div ebx ; get modulus of selected invader
 	mov esi, edx
 	imul esi,esi,4
@@ -130,7 +130,6 @@ moveInvader PROC USES eax
 
 	Return:
 	ret
-
-moveInvader ENDP
+moveInvaders ENDP
 
 END

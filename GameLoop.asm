@@ -45,11 +45,14 @@ main PROC
 
 	; Loop while ticks are queued
 	AdvTick:
-	; Update score, read input, update game state, then render
-
+    ; Clear Screen elements
+    call ClearPlayer
+    call ClearInvaders
+    call ClearBullets
+    ; Read user input
 	call ProcessUserInput
-	call Clrscr
-    call DrawBullets
+
+    ; Update game state
     call playerBulletCollision
     call invaderBulletCollision
     cmp gameStatus, 0
@@ -58,11 +61,15 @@ main PROC
     je GameWon
     call fireInvaderBullet
     call updateInvaderBullets
-	call DrawHud
-	call DrawPlayer
-	call DrawInvaders
-	
+	call moveInvaders
 
+    ; Render game
+	call DrawHud
+    mov bl,'^' ; Symbol for player
+	call DrawPlayer
+    mov bl,'V' ; Symbol for invaders
+	call DrawInvaders
+    call DrawBullets
 
 	sub totalTick,MSPerTick ; Adjust total ticks when tick complete
 	cmp totalTick,MSPerTick
