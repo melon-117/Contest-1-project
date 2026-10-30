@@ -27,13 +27,16 @@ The project was developed using 32-bit x86 Assembly (MASM) in Microsoft Visual S
 <!-- Add screenshots of your game here -->
 
 ### Gameplay
-![Gameplay Screenshot](<img width="1152" height="620" alt="image" src="https://github.com/user-attachments/assets/3830971f-f89e-4abe-91b5-552f0d4d7b7e" />)
+![Gameplay Screenshot]
+<img width="1152" height="620" alt="image" src="https://github.com/user-attachments/assets/3830971f-f89e-4abe-91b5-552f0d4d7b7e" />
 
 ### Victory Screen
-![Victory Screenshot](<img width="1155" height="617" alt="image" src="https://github.com/user-attachments/assets/e033764e-e5f8-4f5d-969e-34db2333a332" />)
+![Victory Screenshot]
+<img width="1155" height="617" alt="image" src="https://github.com/user-attachments/assets/e033764e-e5f8-4f5d-969e-34db2333a332" />
 
 ### Game Over Screen
-![Game Over Screenshot](<img width="1154" height="620" alt="image" src="https://github.com/user-attachments/assets/5a5c4bf8-c885-43cd-b32e-85d86bc0a1e1" />)
+![Game Over Screenshot]
+<img width="1154" height="620" alt="image" src="https://github.com/user-attachments/assets/5a5c4bf8-c885-43cd-b32e-85d86bc0a1e1" />
 
 ## Download and Installation
 
