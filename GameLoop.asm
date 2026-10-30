@@ -46,7 +46,6 @@ main PROC
 	; Loop while ticks are queued
 	AdvTick:
     ; Clear Screen elements
-    call ClearPlayer
     call ClearInvaders
     call ClearBullets
     ; Read user input
@@ -65,7 +64,6 @@ main PROC
 
     ; Render game
 	call DrawHud
-    mov bl,'^' ; Symbol for player
 	call DrawPlayer
     mov bl,'V' ; Symbol for invaders
 	call DrawInvaders

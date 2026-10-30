@@ -13,10 +13,27 @@ LevelLabel BYTE " Level: ", 0
 prevScore DWORD 0 ; scrappy solution to HUD flickering. Saves and checks against previous value to avoid unnecessary update
 prevLives DWORD 0
 prevLevel DWORD 0
+prevPlayerX DWORD 0
 
 .code
 DrawPlayer PROC USES eax edx
 	; Draw the player at (playerX, playerY)
+	mov eax,playerX
+	cmp prevPlayerX,eax
+	jne Continue
+	ret ; return if player has not moved
+	Continue:
+	; Remove previous sprite
+	mov eax,prevPlayerX
+	mov dl,al ; X for Gotoxy
+	mov eax,playerY ; Y for Gotoxy
+	mov dh,al
+	call Gotoxy ; goto previous player position
+	; Replace previous player sprite with empty space
+	mov al,' '
+	call WriteChar
+	mov eax,playerX ; move current X
+	mov prevPlayerX,eax ; update prev X with current
 	; Call a function to draw the player sprite at (eax, edx)
 	mov eax, playerX
 	mov dl, al  ; Move playerX into dl for Gotoxy
@@ -24,7 +41,7 @@ DrawPlayer PROC USES eax edx
 	mov dh, al   ; Clear dh for Gotoxy
 	call Gotoxy
 	; DrawSprite eax, edx, PlayerSprite
-	mov al, bl
+	mov al, '^'
 	call WriteChar
 	ret
 DrawPlayer ENDP
@@ -141,12 +158,6 @@ DrawHUD PROC USES eax ebx ecx edx
 	call WriteDec
 	ret
 DrawHUD ENDP
-
-ClearPlayer PROC USES ebx
-	mov bl,' '
-	call DrawPlayer
-	ret
-ClearPlayer ENDP
 
 ClearInvaders PROC USES ebx
 	mov bl,' '
