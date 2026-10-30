@@ -83,15 +83,21 @@ main PROC
 
     GameOver:
         call clrscr
+        mov eax, 4
+        call SetTextColor
         mov edx, offset gameOverText
         call WriteString
         jmp ShowFinalScore
     GameWon:
         call clrscr
+        mov eax, 2
+        call SetTextColor
         mov edx, offset gameWonText
         call WriteString
         jmp ShowFinalScore
     ShowFinalScore:
+        mov eax, 15
+        call SetTextColor
         call Crlf
         mov edx, OFFSET finalScoreText
         call WriteString

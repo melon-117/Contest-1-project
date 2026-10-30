@@ -23,9 +23,14 @@ DrawPlayer PROC USES eax edx
 	mov eax, playerY
 	mov dh, al   ; Clear dh for Gotoxy
 	call Gotoxy
+	;set player color
+	mov eax, 2
+	call SetTextColor
 	; DrawSprite eax, edx, PlayerSprite
 	mov al, bl
 	call WriteChar
+	mov eax, 7
+	call SetTextColor
 	ret
 DrawPlayer ENDP
 
@@ -43,9 +48,14 @@ DrawInvaders PROC USES eax ecx edx esi edi
 		mov eax, invaderY[esi] ; get invader Y position
 		mov dh, al   ; Move invaderY into dh for Gotoxy
 		call Gotoxy
+		mov eax, 4
+		call SetTextColor
 		; DrawSprite eax, ebx, InvaderSprite
 		mov al, bl
 		call WriteChar
+		;Set invader color
+		mov eax, 7
+		call SetTextColor
 		L2:
 			add esi, 4
 			loop L1
@@ -72,8 +82,15 @@ DrawBullets PROC USES eax ebx ecx edx esi edi
 		mov dl, al
 		mov dh, bl
 		call Gotoxy
+		;set player bullet color
+		mov eax, 14
+		call SetTextColor
 		mov al, '|'
 		call WriteChar
+		;restore default color
+		mov eax, 7
+		call SetTextColor
+
 
 		jmp SkipPlayerBullet
 	DeactivatePlayerBullet:
@@ -94,9 +111,15 @@ DrawBullets PROC USES eax ebx ecx edx esi edi
 		mov dl, al  ; Move invaderBulletX into dl for Gotoxy
 		mov dh, bl   ; Move invaderBulletY into dh for Gotoxy
 		call Gotoxy
+		;Set invader color 
+		mov eax, 12
+		call SetTextColor
 		; DrawSprite eax, ebx, InvaderBulletSprite
 		mov al, '!'
 		call WriteChar
+		;Restore invader color 
+		mov eax, 7
+		call SetTextColor
 	SkipInvaderBullet:
 			add esi, 4
 			loop InvaderBulletLoop
@@ -123,6 +146,9 @@ DrawHUD PROC USES eax ebx ecx edx
 	mov dl, al  ; Move X into dl for Gotoxy
 	mov dh, bl   ; Move Y into dh for Gotoxy
 	call Gotoxy
+	;Set HUD color
+	mov eax, 11
+	call SetTextColor
 	; Draw the score, lives, and level
 	mov edx, OFFSET ScoreLabel
 	call WriteString
@@ -139,6 +165,9 @@ DrawHUD PROC USES eax ebx ecx edx
 	mov eax, level
 	mov prevLevel,eax
 	call WriteDec
+	;Set invader color 
+	mov eax, 7
+	call SetTextColor
 	ret
 DrawHUD ENDP
 
