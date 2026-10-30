@@ -117,8 +117,15 @@ moveInvaders PROC USES eax ebx edx esi
 
 	MoveDown:
 	inc invaderY[esi] ; change invader Y coordinate
+	mov eax,playerY
+	cmp invaderY[esi],eax
+	jge GameOver
 	dec invaderMoveDown ; advance invader move down queue
 	jmp Return
+
+	GameOver:
+	mov gameStatus,0
+	ret
 
 	StartMoveDown:
 	neg invaderDirection ; change direction
